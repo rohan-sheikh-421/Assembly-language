@@ -1,0 +1,52 @@
+[org 0x0100]
+
+jmp start
+subroutine:
+    push bp
+    mov bp, sp
+    push ax
+    push bx
+    push cx
+    push di
+    push si
+
+    ;four inputs
+    mov ax, [bp + 14] ;1
+    mov bx, [bp + 16] ;9
+    mov cx, [bp + 18] ;2
+    mov di, [bp + 20] ;6
+
+    ;operation for first output
+    add ax, bx 
+    mov word[bp + 4], ax ;10
+    ;operation for second output
+    sub bx, cx
+    mov word[bp + 6], bx ;7
+    ;operation for third output
+    mov ax, [bp + 14]
+    MUL di
+    mov word[bp + 8], ax ;6
+
+    pop si
+    pop di
+    pop cx
+    pop bx
+    pop ax
+    pop bp
+    ret
+start:
+    push 6
+    push 2
+    push 9
+    push 1
+    sub sp, 10 ; creates 5 local variables
+    call subroutine
+
+    pop ax ;10
+    pop bx ;7
+    pop cx ;6
+
+    pop dx ;to clear remaining two local variables
+    pop dx
+mov ax, 0x4c00
+int 0x21

@@ -1,0 +1,49 @@
+[org 0x0100]
+
+jmp start
+
+reverse_:
+    push si
+    push di
+    push ax
+    push es
+    push cx
+
+    mov si, string1
+    mov cx, 0
+    calc_str_len:
+        cmp byte[si], 0
+        je exit__
+        inc cx
+        inc si
+        jmp calc_str_len
+    exit__:
+        dec si ;already pointing to end of string
+        mov di, string2
+        mov ah, 0x07
+        reverse_loop:
+            mov al, byte[si]
+            mov byte[di], al
+
+            dec si
+            inc di
+            loop reverse_loop
+    
+    mov byte[di], 0
+
+    pop cx
+    pop es
+    pop ax
+    pop di
+    pop si
+RET
+
+start: call clear
+
+    call reverse_
+
+mov ax, 0x4c00
+int 21h
+
+string1 db 'I am Mr X', 0
+string2 db 0

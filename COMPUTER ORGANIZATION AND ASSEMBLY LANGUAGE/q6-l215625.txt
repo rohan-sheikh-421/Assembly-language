@@ -1,0 +1,27 @@
+[org 0x0100]
+
+mov ax, 0
+
+;near jump
+l1:
+    add ax, 1
+    cmp ax, 3
+    jne l1    ;  -----> Near jump can only jump between its own code segment
+;short jump
+    mov ax, 0
+    mov bx, 0
+    mov cx, 0
+    mov dx, 0
+    mov si, 0
+    mov di, 0
+    add ax, bx
+    je l1
+    jmp l1      ;  -----> short limited to 127 bits both directions
+;far jump
+    add cx, 2
+    sub cx, 1
+    jmp l1      ;  ----->  far jump not limited can jump anywhere in whole code
+
+mov ax, 0x4c00
+int 0x21
+

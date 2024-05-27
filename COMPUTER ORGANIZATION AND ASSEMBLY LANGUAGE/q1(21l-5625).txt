@@ -1,0 +1,54 @@
+[org 0x0100]
+
+jmp start
+
+remove_:
+    push di
+    push si
+    push ax
+    
+    mov si, string1
+    mov di, string2
+
+    check_loop:
+
+        cmp byte[si], 0x20 
+        je ignore
+        cmp byte[si], 0x41;}-->below 'A'
+        jb ignore         ;}----->ascii for punctutions
+        cmp byte[si], 0x7A;}-->above 'z'
+        ja ignore         ;}
+
+        mov ax, 0
+
+        mov al, byte[si]
+        mov byte[di], al
+
+        inc di
+
+        ignore:
+            inc si
+            cmp byte[si], 0
+            je exit
+
+        jmp check_loop
+
+    exit:
+
+        mov byte[di], 0
+
+        pop ax
+        pop si
+        pop di
+RET
+
+
+start: call clear
+
+    call remove_
+
+mov ax, 0x4c00
+int 21h
+
+string1 db 'Mr. Ali, Usman, & Anwar! Doing what???? want to travel????', 0 
+string2 db 0
